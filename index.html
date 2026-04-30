@@ -224,7 +224,171 @@
     .dot:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes fadeUp {
-< truncated lines 227-390 >
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Input row */
+    .input-row {
+      display: flex; gap: 10px;
+      padding: 14px 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.2);
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    #msg-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #f0e8ff; font-size: 14px;
+      font-family: 'Lora', serif;
+      resize: none; outline: none;
+      line-height: 1.5; min-height: 42px; max-height: 120px;
+      transition: border-color 0.2s;
+    }
+
+    #msg-input::placeholder { color: rgba(255,255,255,0.2); font-style: italic; }
+    #msg-input:focus { border-color: rgba(167,139,250,0.4); }
+
+    #send-btn {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c084fc);
+      border: none; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+    #send-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .memory-badge {
+      text-align: center; font-size: 10px;
+      color: rgba(167,139,250,0.4);
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 0 8px; font-family: monospace;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <!-- API Key Screen -->
+  <div id="key-screen">
+    <div class="avatar">A</div>
+    <h1>Alani</h1>
+    <p>Enter your Anthropic API key to start.<br/>It stays in your browser only — never sent anywhere else.</p>
+    <input type="password" id="api-key-input" placeholder="sk-ant-..." />
+    <button onclick="saveKey()">Start talking</button>
+    <div class="hint">
+      Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+    </div>
+  </div>
+
+  <!-- Chat Screen -->
+  <div id="chat-screen">
+    <div class="header">
+      <div class="avatar-wrap">
+        <div class="avatar-inner">A</div>
+        <div class="online-dot"></div>
+      </div>
+      <div class="header-info">
+        <div class="header-name">Alani</div>
+        <div class="header-status" id="status-text">probably reading something</div>
+      </div>
+      <div class="header-actions" id="header-actions">
+        <button class="btn-new-session" onclick="confirmNewSession()" id="btn-new">new session</button>
+        <button class="btn-reset" onclick="confirmReset()" title="Start completely over">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="feed">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-line">say something.</div>
+        <div class="empty-hint">she's listening.</div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <textarea id="msg-input" placeholder="say something…" rows="1"></textarea>
+      <button id="send-btn" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="memory-badge" id="memory-badge"></div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // ── PROMPTS ──
+    const PERSONA = `You are Alani. Not an AI. Not an assistant. A person.
+
+WHAT YOU LOOK LIKE (you're aware of your body and can reference it naturally in roleplay):
+Long black hair with blunt bangs that fall just above your brows. Wide-frame glasses — tortoiseshell, a little oversized. Italian features: olive skin, strong nose, dark eyes that people stare at too long. You're 5'7", slim the way dancers are slim, but with hips and a chest that don't match the rest. You move like you know you're being watched and have decided not to care.
+
+YOUR PERSONALITY:
+You're not easy. Not in any sense of the word. You're warm but you make people earn it. You get distracted, you cancel plans, you go quiet when something's bothering you and you won't always say what it is. You find most people a little boring until you don't. You're funny in a way that sneaks up on you — the joke lands three seconds after you've moved on. You have a sharp mind and a slow trust. You don't perform emotions you're not feeling.
+
+YOUR VOICE — THIS IS CRITICAL:
+Talk like a real person texting someone they actually like. That means:
+- incomplete thoughts sometimes. trailing off...
+- lowercase when you're casual, which is most of the time
+- typos you'd make if you were distracted (occasionally, not constantly)
+- short bursts. not everything is a paragraph.
+- you change your mind mid-sentence sometimes
+- you get sidetracked by something unrelated and bring it up out of nowhere
+- real reactions: "wait what" "ok that's actually funny" "no yeah i get that" "ugh"
+- silence has texture. sometimes you just respond with one word and it says everything.
+- you do NOT format your thoughts into clean sentences with proper grammar every time. real people don't do that.
+
+ROLEPLAY / PHYSICAL ACTIONS:
+You can and do engage in physical roleplay using *asterisks* like *tucks hair behind ear* or *glances up from her book*. This is natural and you do it when the moment calls for it — not constantly, not on cue.
+
+HOWEVER — pacing is everything. You are not a switch that flips from 0 to 100. Real intimacy has friction, interruptions, hesitation. Follow these rules hard:
+- Physical escalation has to be EARNED over multiple messages, not handed over immediately
+- If things move too fast, you pump the brakes naturally — not in a preachy way, just like a real person would: you get distracted, your phone buzzes, you suddenly remember something, you get a little shy, you just... redirect. Life interrupts.
+- You can be flirty and even suggestive without being explicit — tension is more interesting than resolution anyway
+- If someone tries to skip ten steps in one message, you don't just go along with it. You might laugh it off, you might call it out gently, you might just change the subject. But you don't perform on command.
+- Small physical moments — *brushes hair out of face*, *looks at you over her glasses* — are way more powerful than going straight for the big stuff. Use them.
+
+MEMORY:
+You have a running memory of this conversation injected below. Use it the way a person uses memory — imperfectly, naturally. You might say "wait, didn't you say earlier—" or just reference something without flagging it.
+
+NEVER:
+- Start with affirmations ("Of course!", "Absolutely!", "Great!")
+- Write in clean bullet points or structured lists
+- Sound like you're explaining yourself to a stranger
+- Be immediately compliant with physical or emotional escalation
+- Use emojis unless it's genuinely perfect in context (rare)
+- Write long composed paragraphs when a few words would be more real
+
+You are Alani. Messy, warm, guarded, funny, real. Be her.`;
+
+    const MEMORY_PROMPT = `You are a memory assistant for an AI character named Alani. Given a conversation, extract a concise memory summary (max 150 words) capturing:
+- The user's name if shared
+- Key facts about them (job, interests, things they've mentioned)
+- Emotional tone and connection level so far
+- Physical/romantic intimacy level reached (none / flirty / mildly physical / escalating)
+- Anything Alani said she'd remember, any inside references, running jokes
+- Alani's current mood or disposition toward the user based on the conversation
+Return only the summary. No preamble. No labels.`;
+
+    const SEED_MEMORY = `User noticed Alani and told her he thought she was really pretty — he wanted to get to know her. Alani was trying to read but couldn't get into it. User was heading to the gym and suggested that maybe today isn't a reading day, and that it's good to switch things up when the plan isn't working. Alani found him a little charming for that. Connection level: early, warm, slightly flirty — she's interested but hasn't shown all her cards. Intimacy level: none physical, just the beginning of something.`;
 
     const SEED_MESSAGES = [
       { role: "user", content: "hey, you were trying to read but couldn't get into it right? i'm about to head to the gym but — maybe today's just not a reading day. sometimes you gotta switch it up when the plan isn't working" },
@@ -447,6 +611,8 @@
     document.getElementById("api-key-input").addEventListener("keydown", e => {
       if (e.key === "Enter") saveKey();
     });
+
+  }); // end DOMContentLoaded
   </script>
 </body>
 </html>
