@@ -417,7 +417,7 @@ Return only the summary. No preamble. No labels.`;
 
     function saveKey() {
       const val = document.getElementById("api-key-input").value.trim();
-      if (!val.startsWith("sk-")) { alert("That doesn't look like an Anthropic API key. It should start with sk-ant-"); return; }
+      if (!val || val.length < 20) { alert("Please enter your Anthropic API key"); return; }
       apiKey = val;
       localStorage.setItem("alani_api_key", apiKey);
       showChat();
