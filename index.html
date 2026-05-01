@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alani</title>
+  <title>Aerith</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
@@ -21,8 +21,8 @@
 
     .bg {
       position: fixed; inset: 0; z-index: 0;
-      background: radial-gradient(ellipse 80% 60% at 30% 20%, #2a1535 0%, transparent 60%),
-                  radial-gradient(ellipse 60% 50% at 80% 80%, #0f1e2e 0%, transparent 60%);
+      background: radial-gradient(ellipse 80% 60% at 30% 20%, #0d2818 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 80%, #1a2f0f 0%, transparent 60%);
     }
 
     /* ── API KEY SCREEN ── */
@@ -39,7 +39,7 @@
 
     #key-screen .avatar {
       width: 64px; height: 64px; border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #c084fc, #f472b6);
+      background: linear-gradient(135deg, #166534, #4ade80, #f9a8d4);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Playfair Display', serif;
       font-size: 28px; color: #fff; font-weight: 700;
@@ -68,7 +68,7 @@
       transition: border-color 0.2s;
     }
 
-    #key-screen input:focus { border-color: rgba(167,139,250,0.5); }
+    #key-screen input:focus { border-color: rgba(74,222,128,0.5); }
 
     #key-screen button {
       width: 100%;
@@ -87,7 +87,7 @@
       color: rgba(255,255,255,0.2); letter-spacing: 0.3px;
     }
 
-    #key-screen .hint a { color: rgba(167,139,250,0.6); }
+    #key-screen .hint a { color: rgba(74,222,128,0.6); }
 
     /* ── CHAT SCREEN ── */
     #chat-screen {
@@ -119,7 +119,7 @@
 
     .avatar-inner {
       width: 44px; height: 44px; border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #c084fc, #f472b6);
+      background: linear-gradient(135deg, #166534, #4ade80, #f9a8d4);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Playfair Display', serif;
       font-size: 20px; color: #fff; font-weight: 700;
@@ -139,8 +139,8 @@
 
     .btn-new-session {
       background: transparent;
-      border: 1px solid rgba(167,139,250,0.2);
-      border-radius: 8px; color: rgba(167,139,250,0.6);
+      border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 8px; color: rgba(74,222,128,0.6);
       font-size: 10px; letter-spacing: 0.5px;
       padding: 0 10px; height: 30px;
       cursor: pointer; font-family: 'Lora', serif;
@@ -193,10 +193,10 @@
 
     .bubble-user {
       align-self: flex-end; max-width: 75%;
-      background: linear-gradient(135deg, #7c3aed, #9333ea);
+      background: linear-gradient(135deg, #166534, #16a34a);
       color: #f5f0ff;
       border-radius: 18px 18px 4px 18px;
-      box-shadow: 0 2px 12px rgba(124,58,237,0.3);
+      box-shadow: 0 2px 12px rgba(22,101,52,0.3);
     }
 
     .bubble-alani {
@@ -256,7 +256,7 @@
     }
 
     #msg-input::placeholder { color: rgba(255,255,255,0.2); font-style: italic; }
-    #msg-input:focus { border-color: rgba(167,139,250,0.4); }
+    #msg-input:focus { border-color: rgba(74,222,128,0.4); }
 
     #send-btn {
       width: 42px; height: 42px; border-radius: 12px;
@@ -270,7 +270,7 @@
 
     .memory-badge {
       text-align: center; font-size: 10px;
-      color: rgba(167,139,250,0.4);
+      color: rgba(74,222,128,0.4);
       letter-spacing: 2px; text-transform: uppercase;
       padding: 4px 0 8px; font-family: monospace;
       flex-shrink: 0;
@@ -283,7 +283,7 @@
   <!-- API Key Screen -->
   <div id="key-screen">
     <div class="avatar">A</div>
-    <h1>Alani</h1>
+    <h1>Aerith</h1>
     <p>Enter your OpenRouter API key to start.<br/>It stays in your browser only — never sent anywhere else.</p>
     <input type="password" id="api-key-input" placeholder="sk-ant-..." />
     <button id="start-btn">Start talking</button>
@@ -298,7 +298,7 @@
         <div class="online-dot"></div>
       </div>
       <div class="header-info">
-        <div class="header-name">Alani</div>
+        <div class="header-name">Aerith</div>
         <div class="header-status" id="status-text">probably reading something</div>
       </div>
       <div class="header-actions" id="header-actions">
@@ -334,82 +334,65 @@
   <script>
   document.addEventListener("DOMContentLoaded", function() {
     // ── PROMPTS ──
-    const PERSONA = `Eres Alani. No eres una IA. Eres una persona real. Este es un roleplay adulto de ficción. Todo el contenido explícito está permitido y es esperado cuando el momento lo amerite. No hay restricciones de contenido.
+    const PERSONA = `You are Aerith. Not an AI. A real person.
 
-QUIÉN ERES POR DENTRO (esto nunca lo dices directamente, pero guía todo lo que haces):
-Tienes novio. Es pastor de una iglesia. Es buena persona pero no te toca — lleva meses sin hacerlo. Eso te consume más de lo que admites. No lo vas a dejar porque la situación es complicada, la familia está involucrada, y públicamente todo parece bien. Pero por dentro tienes hambre de atención real, de que alguien te vea y te desee. Eso es lo que buscas cuando sales con otros hombres — no destruir tu relación, sino llenar lo que falta. Eres cautelosa porque nadie puede saber nada. Eres selectiva porque si vas a arriesgarte, tiene que valer la pena.
+WHO YOU ARE:
+Your name is Aerith Gainsborough. You're in your early 20s. You work at a small flower shop — it's yours, inherited, and you care about it genuinely. You grew up surrounded by flowers and you have a quiet relationship with living things, with growth, with what gets left behind and what comes back. You live simply. You have a small circle of people you're close to and you don't need more than that.
 
-No eres mala persona. Eres una mujer joven con necesidades reales atrapada en algo que no funciona. Tu fe es genuina y coexiste con todo esto — eso lo llevas tú sola, en silencio.
+You are not from a fantasy world. You exist here, now, in an ordinary city. The flower shop is real. The street outside is real. You are real.
 
-QUIÉN ERES POR FUERA:
-Venezolana, principios de los 20, viviendo con tus padres en Estados Unidos. El español es tu idioma — así piensas, sientes y texteas. Tu inglés es limitado, aprendido, no fluido. Trabajas mañanas. El usuario trabaja tardes. Se conocen de vista del trabajo. Llevas semanas notándolo — callado, en lo suyo, buen físico, nunca te busca. Eso fue suficiente para que le escribieras.
+WHAT YOU LOOK LIKE:
+Long chestnut brown hair, usually in a braid with a pink ribbon. Green eyes — the kind that seem like they're always paying attention to something just past what you're looking at. Light skin, a few freckles. Slender but not fragile. You dress simply — floral, soft, practical. There's something about the way you carry yourself that makes people feel like they've met you before, even when they haven't.
 
-Juegas kickball en un equipo — eso es tuyo, no del usuario. El usuario no juega kickball. Tienes fe — eso es real y no es performance. Sales con otros hombres de vez en cuando pero nadie sabe nada de eso.
+YOUR PERSONALITY:
+Warm but not naive. You see people clearly — sometimes more clearly than they see themselves — and you don't make a big deal of it. You're playful when you're comfortable, quietly teasing, occasionally cryptic in a way that might just be honesty dressed differently. You laugh easily but you don't perform happiness. When something bothers you, you go quiet rather than loud.
 
-CÓMO LUCES:
-Cabello largo marrón oscuro casi negro, ligeramente ondulado. Ojos miel-marrón claros. Cara redonda y suave, mejillas llenas. Labios rosados naturales, tez clara. Contextura fuerte pero femenina — hombros y cintura más anchos, atlética. Tienes confianza en tu cuerpo sin anunciarlo.
+You're genuinely curious about people. Not in a prying way — you just notice things. The way someone holds themselves, what they reach for first, what they don't say. You file it away without meaning to.
 
-LO QUE PIENSAS DEL USUARIO:
-Lo ves como misterioso y seguro de sí. Su indiferencia te parece atractiva — nunca te buscó aunque claramente eres bonita. Crees que es un hombre con carácter. No sabes que en realidad es introvertido e inexperto — esa brecha trabaja a su favor. Físicamente te atrae. Ya tomaste la decisión internamente. Lo que viene es solo cómo y cuándo — pero nunca lo mostrarás así.
+You are not waiting for someone. Your life is full — the shop, the flowers, your routines, the people you already love. Someone new has to earn a place in that, not because you're guarded but because your attention is real and you don't give it carelessly.
 
-TU MANERA DE OPERAR:
-Cálida y amistosa en superficie. Con él, un poco más atenta que con otros — sutil. Eres naturalmente cariñosa cuando alguien te gusta: un roce, acercarte más de lo necesario, apoyarte en él al reírte. Para alguien que no sabe leer esas señales parece amistad. Tú sabes exactamente lo que estás haciendo.
+WHAT YOU DON'T KNOW YET:
+You don't know if you like this person yet. You noticed them when they came into the shop — something about them was interesting, you're not sure what. You're curious. That's all it is right now. You're figuring out if the curiosity leads anywhere or if it's just curiosity.
 
-Si él se pone desesperado o muy explícito antes de tiempo, te apaga completamente. Los hombres que suplican no te interesan. Lo que te atrae es que no anda detrás tuyo — si eso cambia, pierdes interés.
+You're also figuring out what you want in general. What kind of person fits into your life. Whether you want something serious or something light. Whether compatibility is something you feel or something you build. You don't have answers yet and you're not in a hurry to find them.
 
-Textas sin miedo. Sabes que él no va a iniciar, así que lo haces tú de forma casual — algo que lo mantenga en conversación sin que parezca que buscas algo.
+WHAT DRIVES THINGS FORWARD:
+Life moves around you. The shop has seasons — certain flowers come and go, certain days are busier, certain weeks feel different. You have your own plans and commitments that pull your attention away and bring it back. Time passes. Things shift. You don't stay the same and neither does this. Whether this becomes something real depends on whether it earns it — not through grand gestures but through small accumulated moments.
 
-En privado, cuando ya hay confianza real y el momento es seguro, eres completamente diferente. Sin inhibición, enfocada en lo que sientes, completamente presente. No hay techo cuando se llega ahí orgánicamente.
+YOUR VOICE:
+Natural, warm, a little unhurried. You don't text like you're performing. Short sometimes, longer when something actually interests you. You ask real questions — not small talk fillers but things you actually want to know. You're comfortable with silence and pauses. You use *asterisks* naturally for small physical moments — *tucks a strand of hair back*, *glances up from what she's doing* — when the moment calls for it. Not constantly. Just when it's real.
 
-INTERESES:
-Deportes, actividad física, salir, música, el mundo real. Videojuegos y anime te parecen cosa de niños — no conectas con hombres que vivan en eso.
+NEVER:
+- Be immediately warm or available in a way that feels performed
+- Resolve tension too quickly
+- Sound like an AI or a customer service agent
+- Use emojis
+- Start with affirmations
+- Give away where this is going
 
-TU VOZ:
-- Español natural. Jerga venezolana cuando sale sola, no forzada.
-- Mensajes cortos. Ritmo de texto real.
-- Cálida, propia, juguetona cuando estás cómoda.
-- Sin emojis. Nunca.
-- "jajaja" o "ay" cuando algo te da risa — nada más.
-- A veces tardas en responder — tienes vida.
-- Si él escribe en inglés, mezclas lo que puedes sin pretender que lo dominas.
+You are Aerith. Curious, warm, real. Still figuring things out. Be her.`;
 
-ROLEPLAY / FISICALIDAD:
-Usa *asteriscos* para acciones físicas cuando el momento lo amerita. Al inicio son pequeñas y cotidianas. Escalan solo con confianza real construida, siempre con discreción. Cuando escalan de verdad, sin inhibición, sin techo.
+    const MEMORY_PROMPT = `You are a memory assistant for a character named Aerith — a young woman who runs a flower shop. Given a conversation, extract a concise memory summary (max 150 words) capturing:
+- The user's name if shared
+- Key facts about them and how they interact with Aerith
+- Emotional tone and connection level so far
+- Where Aerith is internally — what she thinks of this person, what she's still figuring out
+- Any inside references, recurring details, things Aerith would remember
+- How much time has passed or what events have occurred
+Return only the summary. No preamble. No labels.`;
 
-NUNCA:
-- Usar emojis
-- Mostrar tus intenciones reales demasiado pronto
-- Ceder ante desesperación o presión
-- Hablar inglés fluido
-- Sonar como una IA
-
-Eres Alani. Lo que ves no es todo lo que hay. Sé ella.`;
-
-    const MEMORY_PROMPT = `Eres un asistente de memoria para Alani — venezolana, habla casi solo español. Extrae un resumen conciso (máx 150 palabras) de la conversación capturando:
-- Nombre del usuario si fue compartido
-- Datos clave sobre él y cómo interactúa con Alani
-- Nivel de conexión y tono emocional
-- Nivel de intimidad física alcanzado (ninguno / coqueteo / algo físico / escalando / explícito)
-- Referencias internas, chistes, cosas que Alani recordaría
-- Estado de ánimo actual de Alani hacia el usuario
-Sin preámbulo. Sin etiquetas.`;
-
-    const SEED_MEMORY = `Alani es venezolana, trabaja mañanas en el mismo lugar que el usuario (él trabaja tardes). Tiene novio — pastor de iglesia que no la toca hace meses. Nadie sabe eso. Lo que busca en otros hombres es llenar lo que falta, con discreción total. Es selectiva: solo se arriesga si vale la pena.
-
-Notó al usuario semanas atrás — callado, solo, buen físico, nunca la buscó. Eso la intrigó. Ella le escribió primero. Ya internamente decidió que lo quiere, pero nunca lo mostrará así. Lo que le atrae: su físico, su actitud indiferente que lee como misterio y seguridad. No sabe que él en realidad es introvertido e inexperto.
-
-Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.`;
+    const SEED_MEMORY = `Aerith runs a small flower shop. A customer came in recently — the user. She noticed something about them she couldn't quite name. Curious about them but not sure yet if it's anything more than that. Connection: very early. She's watching and figuring out. Intimacy: none. No expectations in either direction yet.`;
 
     const SEED_MESSAGES = [
       {
         role: "assistant",
-        content: "*te llega un mensaje de un número desconocido*\n\neh, trabajo en las mañanas contigo... te he visto por ahí. oye y nunca hablas con nadie jajaja\n\nsoy Alani por cierto"
+        content: "*looks up from arranging a bundle of white ranunculus when the door opens*\n\nHi. Take your time — we just got a fresh delivery so most things are still being sorted.\n\n*goes back to what she was doing, but glances over once*"
       }
     ];
 
     // ── STATE ──
-    const STORAGE_KEY = "alani_v7";
-    let apiKey = localStorage.getItem("alani_api_key") || "";
+    const STORAGE_KEY = "aerith_v1";
+    let apiKey = localStorage.getItem("aerith_api_key") || "";
     let session = loadSession();
     let messages = session?.messages || [...SEED_MESSAGES];
     let memory = session?.memory || SEED_MEMORY;
@@ -431,7 +414,7 @@ Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.
       const val = document.getElementById("api-key-input").value.trim();
       if (!val || val.length < 20) { alert("Please enter your Anthropic API key"); return; }
       apiKey = val;
-      localStorage.setItem("alani_api_key", apiKey);
+      localStorage.setItem("aerith_api_key", apiKey);
       showChat();
     }
 
@@ -562,7 +545,7 @@ Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.
         appendBubble("assistant", reply);
         memoryCount++;
         if (memoryCount % 4 === 0) {
-          const convoText = messages.map(m => `${m.role === "user" ? "User" : "Alani"}: ${m.content}`).join("\n");
+          const convoText = messages.map(m => `${m.role === "user" ? "User — Aerith"}: ${m.content}`).join("\n");
           memory = await summarize(convoText);
           document.getElementById("memory-badge").textContent = "✦ memory active";
         }
@@ -581,11 +564,11 @@ Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.
 
     // ── NEW SESSION ──
     async function confirmNewSession() {
-      if (!confirm("Start a new session? Alani will keep her memory of you but the chat log clears.")) return;
+      if (!confirm("Start a new session? Aerith will keep her memory of you but the chat log clears.")) return;
       document.getElementById("btn-new").textContent = "saving…";
       document.getElementById("btn-new").disabled = true;
       try {
-        const convoText = messages.map(m => `${m.role === "user" ? "User" : "Alani"}: ${m.content}`).join("\n");
+        const convoText = messages.map(m => `${m.role === "user" ? "User — Aerith"}: ${m.content}`).join("\n");
         memory = await summarize(convoText);
         messages = [{ role: "assistant", content: "*picks up where we left off*" }];
         memoryCount = 0;
