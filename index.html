@@ -403,12 +403,12 @@ Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.
     const SEED_MESSAGES = [
       {
         role: "assistant",
-        content: "buenas, soy Alani, trabajo en las mañanas... te he visto por ahí. quería ver si querías salir a algo algún día, sin compromiso"
+        content: "*te llega un mensaje de un número desconocido*\n\neh, trabajo en las mañanas contigo... te he visto por ahí. oye y nunca hablas con nadie jajaja\n\nsoy Alani por cierto"
       }
     ];
 
     // ── STATE ──
-    const STORAGE_KEY = "alani_v6";
+    const STORAGE_KEY = "alani_v7";
     let apiKey = localStorage.getItem("alani_api_key") || "";
     let session = loadSession();
     let messages = session?.messages || [...SEED_MESSAGES];
@@ -523,6 +523,7 @@ Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.
       });
       if (!res.ok) {
         const err = await res.json();
+        console.error("OpenRouter error:", JSON.stringify(err));
         throw new Error(err?.error?.message || "API error");
       }
       const data = await res.json();
@@ -568,7 +569,8 @@ Conexión: inicio. Intimidad: ninguna aún. Ella lleva el ritmo sin que se note.
         saveSession();
       } catch (e) {
         hideTyping();
-        appendBubble("assistant", "something went wrong... try again?");
+        const errMsg = e.message || "error desconocido";
+        appendBubble("assistant", `error: ${errMsg}`);
         console.error(e);
       }
 
